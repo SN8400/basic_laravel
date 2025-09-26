@@ -64,3 +64,85 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Setting up project
+copy .env.example .env
+
+APP_NAME="AE Stock"
+APP_ENV=production
+APP_URL=http://<host>:<port>   # หรือโดเมนจริง
+
+## Srcipt Create Table
+-- ลบตารางเก่าถ้ามีอยู่แล้ว
+IF OBJECT_ID('[dbo].[users]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[users];
+GO
+
+-- สร้างตาราง users
+CREATE TABLE [dbo].[users] (
+    [id]             INT IDENTITY(1,1) PRIMARY KEY,
+    [name]           NVARCHAR(255)    NOT NULL,
+    [username]       NVARCHAR(100)    NOT NULL UNIQUE
+    [email]          NVARCHAR(255)    NOT NULL UNIQUE,
+    [password]       NVARCHAR(255)    NOT NULL,
+    [remember_token] NVARCHAR(100)    NULL,
+    [is_active]      BIT              NOT NULL DEFAULT(1),
+    [created_at]     DATETIME2        NOT NULL DEFAULT SYSDATETIME(),
+    [updated_at]     DATETIME2        NOT NULL DEFAULT SYSDATETIME(),
+);
+GO
+
+IF OBJECT_ID('[dbo].[personal_access_tokens]', 'U') IS NULL
+BEGIN
+  CREATE TABLE [dbo].[personal_access_tokens](
+      [id]              BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+      [tokenable_type]  NVARCHAR(255) NOT NULL,
+      [tokenable_id]    BIGINT        NOT NULL,
+      [name]            NVARCHAR(255) NOT NULL,
+      [token]           NVARCHAR(64)  NOT NULL UNIQUE,   -- Sanctum เก็บ hash 64 ตัว
+      [abilities]       NVARCHAR(MAX) NULL,
+      [last_used_at]    DATETIME2     NULL,
+      [expires_at]      DATETIME2     NULL,
+      [created_at]      DATETIME2     NOT NULL DEFAULT SYSDATETIME(),
+      [updated_at]      DATETIME2     NOT NULL DEFAULT SYSDATETIME()
+  );
+  CREATE INDEX IX_pat_tokenable
+    ON [dbo].[personal_access_tokens]([tokenable_type],[tokenable_id]);
+END
+
+DB_CONNECTION=sqlsrv|mysql
+DB_HOST=...
+DB_PORT=...
+DB_DATABASE=...
+DB_USERNAME=...
+DB_PASSWORD=...
+
+
+composer install --no-interaction --prefer-dist
+php artisan key:generate
+php artisan storage:link
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+
+
+##Create First User
+cd Project Path
+php artisan tinker --execute
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+ User::updateOrInsert(
+   [
+     'name'       => 'Laco Admin',
+     'email'      => 'admin@local',
+     'username'      => 'admin',
+     'password'   => Hash::make('P@ssw0rd1993'),
+     'is_active'      => 1,
+     'created_at' => now(),
+     'updated_at' => now()
+   ]
+ );
+
+php artisan serve --host=127.0.0.1 --port=8080
