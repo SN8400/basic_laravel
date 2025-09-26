@@ -83,7 +83,7 @@ GO
 CREATE TABLE [dbo].[users] (
     [id]             INT IDENTITY(1,1) PRIMARY KEY,
     [name]           NVARCHAR(255)    NOT NULL,
-    [username]       NVARCHAR(100)    NOT NULL UNIQUE
+    [username]       NVARCHAR(100)    NOT NULL UNIQUE,
     [email]          NVARCHAR(255)    NOT NULL UNIQUE,
     [password]       NVARCHAR(255)    NOT NULL,
     [remember_token] NVARCHAR(100)    NULL,
