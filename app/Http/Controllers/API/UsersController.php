@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -55,6 +56,7 @@ class UsersController extends Controller
                 'username' => $user->username,
                 'email'    => $user->email,
                 'is_active'=> (bool)$user->is_active,
+                'user_link_id'=> (int)$user->user_link_id,
             ],
         ], 201, [], JSON_UNESCAPED_UNICODE);
     }
@@ -68,12 +70,17 @@ class UsersController extends Controller
         if (!$user) {
             return response()->json(['status' => 'error', 'message' => 'Not found'], 404);
         }
+
+        // Login ด้วย User Model
+        Auth::login($user);
+
         return response()->json([
-            'id'       => $user->id,
-            'name'     => $user->name,
-            'username' => $user->username,
-            'email'    => $user->email,
-            'is_active'=> (bool)$user->is_active
+            'id'          => $user->id,
+            'name'        => $user->name,
+            'username'    => $user->username,
+            'email'       => $user->email,
+            'user_link_id'=> (int) ($user->user_link_id),
+            'is_active'   => (bool) $user->is_active
         ], 200, [], JSON_UNESCAPED_UNICODE);
     }
 

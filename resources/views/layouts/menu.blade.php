@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>{{ $title ?? 'App' }}</title>
+  <title>{{ config('app.name', 'App') }}</title>
 
   {{-- ใช้ไฟล์โลคัลที่โหลดไว้ใน public/assets --}}
   <link rel="stylesheet" href="{{ asset('assets/bootstrap/bootstrap.min.css') }}">
@@ -28,13 +28,13 @@
       <div class="d-flex align-items-center gap-4">
         <div class="app-brand">
           <img src="{{ asset('assets/img/laco_monster.png') }}" width="64" height="64" alt="">
-          <span>Man-Power</span>
+          <span>{{ config('app.name', 'App') }}</span>
         </div>
         <nav class="app-nav d-none d-md-block">
-          <a href="{{ url('/rooms') }}" class="{{ request()->is('rooms*') ? 'active' : '' }}">จัดการห้อง</a>
-          <a href="{{ url('/works') }}" class="{{ request()->is('works*') ? 'active' : '' }}">จัดการงาน</a>
-          <a href="{{ url('/plans') }}" class="{{ request()->is('plans*') ? 'active' : '' }}">แผนงาน</a>
           <a href="{{ url('/users') }}" class="{{ request()->is('users*') ? 'active' : '' }}">User</a>
+          <a href="{{ url('/brokers') }}" class="{{ request()->is('brokers*') ? 'active' : '' }}">จัดการ Broker</a>
+          <a href="{{ url('/requisitions') }}" class="{{ request()->is('requisitions*') ? 'active' : '' }}">จัดการใบเบิก</a>
+          <a href="{{ url('/setting') }}" class="{{ request()->is('setting*') ? 'active' : '' }}">ตังค่า</a>
         </nav>
       </div>
 
@@ -70,6 +70,8 @@
   <script src="{{ asset('assets/bootstrap/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
   <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
+  <script src="{{ asset('vendor/html2pdf/html2pdf.bundle.min.js') }}" defer></script>
+
   <script>
     const iconMap = { success:'success', failed:'error', error:'error' };
     

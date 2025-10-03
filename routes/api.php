@@ -3,18 +3,16 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\RoomsController;
-use App\Http\Controllers\API\PositionsController;
-use App\Http\Controllers\API\EmployeesController;
-use App\Http\Controllers\API\EmployeeExternalMapController;
-use App\Http\Controllers\API\RoomDefaultsController;
-use App\Http\Controllers\API\PlansController;
-use App\Http\Controllers\API\PlanItemsController;
-use App\Http\Controllers\API\WorksController;
-use App\Http\Controllers\API\WorkAssignmentsController;
-use App\Http\Controllers\API\WorkEventsController;
-use App\Http\Controllers\API\WorkSessionsController;
 use App\Http\Controllers\API\UsersController;
+use App\Http\Controllers\API\PlanScheduleController;
+use App\Http\Controllers\API\CropController;
+use App\Http\Controllers\API\UserFarmerController;
+use App\Http\Controllers\API\BrokerController;
+use App\Http\Controllers\API\ChemicalController;
+use App\Http\Controllers\API\RequisitionController;
+use App\Http\Controllers\API\SysUpdateLogController;
+use App\Http\Controllers\API\SupStockController;
+use App\Http\Controllers\API\RequisitionItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,21 +24,20 @@ use App\Http\Controllers\API\UsersController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+    Route::get('/planschedules', [PlanScheduleController::class, 'index']);
+    Route::get('/crop', [CropController::class, 'index']);
+    Route::get('/userFarmer', [UserFarmerController::class, 'index']);
+
 Route::middleware(['web','guest'])->post('/auth/login', [AuthController::class, 'login']);
 Route::middleware(['web','auth'])->post('auth/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('auth/me',     [AuthController::class, 'me']);
-    Route::apiResource('rooms', RoomsController::class)->only(['store','update','destroy']);
-    Route::apiResource('positions', PositionsController::class)->only(['store','update','destroy']);
-    Route::apiResource('employees', EmployeesController::class)->only(['store','update','destroy']);
-    Route::apiResource('employee-external-map', EmployeeExternalMapController::class);
-    Route::apiResource('room-defaults', RoomDefaultsController::class);
-    Route::apiResource('plans', PlansController::class)->only(['store','update','destroy']);
-    Route::apiResource('plan-items', PlanItemsController::class);
-    Route::apiResource('works', WorksController::class)->only(['store','update','destroy']);
-    Route::apiResource('work-assignments', WorkAssignmentsController::class);
-    Route::apiResource('work-events', WorkEventsController::class);
-    Route::apiResource('work-sessions', WorkSessionsController::class);
     Route::apiResource('users', UsersController::class);
+    Route::apiResource('brokers', BrokerController::class);
+    Route::apiResource('chemicals', ChemicalController::class);
+    Route::get('/requisitions/broker/{id}', [RequisitionController::class, 'getByBroker']);
+    Route::apiResource('requisitions', RequisitionController::class);
+    Route::apiResource('requisition-items', RequisitionItemController::class);
+    Route::apiResource('sys-log', SysUpdateLogController::class);
+    Route::apiResource('sup-stock', SupStockController::class);
 });
-

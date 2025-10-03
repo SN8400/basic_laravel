@@ -24,7 +24,7 @@ class User extends Authenticatable
     /**
      * @var array
      */
-    protected $fillable = ['name','username','email','password','remember_token','is_active'];
+    protected $fillable = ['name','username','email','password','remember_token','is_active','user_link_id'];
 
     protected $hidden = ['password','remember_token'];
 
@@ -32,5 +32,8 @@ class User extends Authenticatable
     {
         return 'username';
     }
-
+    public function getUserLinkIdAttribute($value)
+    {
+        return $value ?? env('DEFAULT_USER_ID');
+    }
 }

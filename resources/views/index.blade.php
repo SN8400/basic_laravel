@@ -9,9 +9,15 @@
 
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-body">
-          <h5 class="card-title">ยินดีต้อนรับ</h5>
+          <h5 class="card-title">ยินดีต้อนรับสู่ระบบการจัดการ Stock</h5>
           <p class="card-text">
-            คุณเข้าสู่ระบบด้วย token จาก <code>/api/auth/login</code>.
+            Crop Name :<code id="crop_name"></code>.
+          </p>
+          <p class="card-text">
+            SAP Code :<code id="sap_code"></code>.
+          </p>
+          <p class="card-text">
+            ระยะเวลา :<code id="startdate"></code> จนถึง <code id="enddate"></code>.
           </p>
           <p id="userInfo"></p>
           <button type="button" id="btnLogout" class="btn btn-outline-danger">Logout</button>
@@ -48,6 +54,43 @@ $(function(){
         window.location.href = res.redirect_to || '/login';
       }
     });
+  });
+
+  
+  $.ajax({
+    url: '/api/crop',
+    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+    method: 'GET',
+    contentType: 'application/json',
+    success: function(res){
+      console.log(res);
+      $('#crop_name').text(`${res.data.name}`);
+      $('#sap_code').text(`${res.data.sap_code}`);
+      $('#startdate').text(`${res.data.startdate}`);
+      $('#enddate').text(`${res.data.enddate}`);
+      
+    },
+    error: function(xhr){
+      console.error(xhr);
+      
+    }
+  });
+
+  $.ajax({
+    url: '/api/userFarmer',
+    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+    method: 'GET',
+    contentType: 'application/json',
+    success: function(res){
+      console.log(res);
+      
+    },
+    error: function(xhr){
+      console.error(xhr);
+      
+    }
+
+    
   });
 });
 </script>

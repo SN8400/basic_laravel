@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'AE Stock Management'),
 
     /*
     |--------------------------------------------------------------------------
@@ -70,8 +70,8 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
-
+    'timezone' => 'Asia/Bangkok',
+    
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
